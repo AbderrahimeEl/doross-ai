@@ -1,0 +1,137 @@
+### Authentication Endpoints
+
+# Register a new user
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com",
+  "password": "password123",
+  "role": "USER"
+}
+
+###
+
+# Login with existing user
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+
+###
+
+# Login with existing user
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+###
+
+# Register an admin user
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "admin123",
+  "role": "ADMIN"
+}
+
+###
+
+### User Management Endpoints
+# Note: You need to replace {{auth_token}} with the actual token received from login/signup
+
+# Get all users (admin only)
+GET http://localhost:8080/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjI5NzUyNiwiZXhwIjoxNzQ2MzgzOTI2fQ.vgfD0qAfPsDJ5ocMB1oNk-Coc8DgiVLby8gdOmF5GCQ
+
+###
+
+# Get user by ID
+GET http://localhost:8080/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjI5NzUyNiwiZXhwIjoxNzQ2MzgzOTI2fQ.vgfD0qAfPsDJ5ocMB1oNk-Coc8DgiVLby8gdOmF5GCQ
+
+###
+
+# Create a new user (admin only)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjI5NzUyNiwiZXhwIjoxNzQ2MzgzOTI2fQ.vgfD0qAfPsDJ5ocMB1oNk-Coc8DgiVLby8gdOmF5GCQ
+
+{
+  "name": "New User",
+  "email": "newuser@example.com",
+  "password": "newpassword123",
+  "role": "USER"
+}
+
+###
+
+# Update a user
+PUT http://localhost:8080/api/users/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjI5NzUyNiwiZXhwIjoxNzQ2MzgzOTI2fQ.vgfD0qAfPsDJ5ocMB1oNk-Coc8DgiVLby8gdOmF5GCQ
+
+{
+  "name": "Updated User",
+  "email": "updateduser@example.com",
+  "password": "updatedpassword123",
+  "role": "USER"
+}
+
+###
+
+# Delete a user (admin only)
+DELETE http://localhost:8080/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjI5NzUyNiwiZXhwIjoxNzQ2MzgzOTI2fQ.vgfD0qAfPsDJ5ocMB1oNk-Coc8DgiVLby8gdOmF5GCQ
+
+###
+
+# Using environment variables for tokens
+# You can create a http-client.env.json file with the following content:
+# {
+#   "dev": {
+#     "auth_token": "your-auth-token-here"
+#   }
+# }
+
+###
+
+### Database Access
+# H2 Console is available at:
+# http://localhost:8080/h2-console
+#
+# JDBC URL: jdbc:h2:mem:dorossaidb
+# Username: sa
+# Password: password
+
+###
+
+### Summarization Endpoint
+
+# Summarize text (requires authentication)
+POST http://localhost:8080/api/summarize
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc0NjMwMDk0MCwiZXhwIjoxNzQ2Mzg3MzQwfQ.dNELxevtGEKDN2Qgoga1o_3zMgiQrJ1L07ZCCmMbr7g
+
+{
+  "text":"Margaret Sibella Brown (1866–1961) was a Canadian amateur bryologist specializing in species native to Nova Scotia. Early in her career she was involved with gathering sphagnum moss to be used as surgical dressings during World War I, when cotton was in short supply. After the war, she researched mosses from around the world, publishing papers on materials she had collected herself as well as cataloging samples collected by others; her collections are now housed at major herbaria in North America and Europe. Born into upper-class society, Brown was educated in Nova Scotia and abroad. Although lacking formal scientific training, she has been recognized for her contributions to bryology and as an authority on the mosses and liverworts of Nova Scotia. At the age of 84, Brown was awarded an honorary MA degree from Acadia University after declining their offer of a PhD. She died at her home in Halifax aged 95 and in 2010 was posthumously inducted into the Nova Scotia Scientific Hall of Fame.",
+  "language": "en"
+}
+
+###
+
+### Application Notes
+# - JWT tokens expire after 24 hours (86400000 ms)
+# - Server runs on port 8080
+# - Database is H2 in-memory, resets on application restart
