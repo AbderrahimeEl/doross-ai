@@ -1,7 +1,6 @@
-package com.pi.dorossai.summarization.service;
+package com.pi.dorossai.summarization;
 
-import com.pi.dorossai.summarization.dto.SummarizationRequest;
-import com.pi.dorossai.summarization.dto.SummarizationResponse;
+import com.pi.dorossai.config.FastApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -20,8 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class SummarizationService {
-    private static final String SUMMARIZATION_API_URL = "http://localhost:8000/summarize";
     private final RestTemplate restTemplate;
+    private final FastApiConfig fastApiConfig;
 
     @Retryable(
         value = { Exception.class },
@@ -39,8 +38,9 @@ public class SummarizationService {
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestMap, headers);
 
+        String url = fastApiConfig.getFastApiBaseUrl() + "/summarize";
         ResponseEntity<Map> response = restTemplate.postForEntity(
-            SUMMARIZATION_API_URL, 
+            url, 
             entity, 
             Map.class
         );

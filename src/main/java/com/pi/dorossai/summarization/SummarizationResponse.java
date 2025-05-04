@@ -1,4 +1,4 @@
-package com.pi.dorossai.summarization.dto;
+package com.pi.dorossai.summarization;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

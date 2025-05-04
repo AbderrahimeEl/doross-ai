@@ -1,4 +1,4 @@
-package com.pi.dorossai.summarization.dto;
+package com.pi.dorossai.summarization;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

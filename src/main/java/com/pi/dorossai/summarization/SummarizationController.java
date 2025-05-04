@@ -1,8 +1,5 @@
-package com.pi.dorossai.summarization.controller;
+package com.pi.dorossai.summarization;
 
-import com.pi.dorossai.summarization.dto.SummarizationRequest;
-import com.pi.dorossai.summarization.dto.SummarizationResponse;
-import com.pi.dorossai.summarization.service.SummarizationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
