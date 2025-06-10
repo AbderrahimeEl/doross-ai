@@ -85,14 +85,17 @@ public class MeetingService {
         );
     }
     
-    private MeetingNotesResponse parseAiResponse(String response) {
-        try {
+    private MeetingNotesResponse parseAiResponse(String response) {        try {
             // Try to parse as JSON first
+            @SuppressWarnings("unchecked")
             Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
             
             String summary = (String) jsonResponse.getOrDefault("summary", "Meeting summary not available");
+            @SuppressWarnings("unchecked")
             List<String> actionItems = (List<String>) jsonResponse.getOrDefault("action_items", new ArrayList<>());
+            @SuppressWarnings("unchecked")
             List<String> keyDecisions = (List<String>) jsonResponse.getOrDefault("key_decisions", new ArrayList<>());
+            @SuppressWarnings("unchecked")
             List<String> followUpQuestions = (List<String>) jsonResponse.getOrDefault("follow_up_questions", new ArrayList<>());
             
             return new MeetingNotesResponse(summary, actionItems, keyDecisions, followUpQuestions);

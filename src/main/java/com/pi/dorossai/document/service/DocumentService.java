@@ -75,9 +75,9 @@ public class DocumentService {
         );
     }
     
-    private DocumentQAResponse parseAiResponse(String response) {
-        try {
+    private DocumentQAResponse parseAiResponse(String response) {        try {
             // Try to parse as JSON first
+            @SuppressWarnings("unchecked")
             Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
             
             String answer = (String) jsonResponse.get("answer");

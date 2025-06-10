@@ -85,13 +85,14 @@ public class ModerationService {
         );
     }
     
-    private ModerationResponse parseAiResponse(String response, ModerationRequest request) {
-        try {
+    private ModerationResponse parseAiResponse(String response, ModerationRequest request) {        try {
             // Try to parse as JSON first
+            @SuppressWarnings("unchecked")
             Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
             
             boolean flagged = (Boolean) jsonResponse.getOrDefault("flagged", false);
             String level = (String) jsonResponse.getOrDefault("level", request.getLevel());
+            @SuppressWarnings("unchecked")
             List<String> categories = (List<String>) jsonResponse.getOrDefault("categories", new ArrayList<>());
             Object confidenceObj = jsonResponse.getOrDefault("confidence", 0.5);
             double confidence = confidenceObj instanceof Number ? ((Number) confidenceObj).doubleValue() : 0.5;

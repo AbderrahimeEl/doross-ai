@@ -74,12 +74,13 @@ public class WritingService {
         );
     }
     
-    private WritingImprovementResponse parseAiResponse(String response, WritingImprovementRequest request) {
-        try {
+    private WritingImprovementResponse parseAiResponse(String response, WritingImprovementRequest request) {        try {
             // Try to parse as JSON first
+            @SuppressWarnings("unchecked")
             Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
             
             String improvedText = (String) jsonResponse.get("improved_text");
+            @SuppressWarnings("unchecked")
             List<String> changes = (List<String>) jsonResponse.get("changes");
             Integer originalLength = (Integer) jsonResponse.getOrDefault("original_length", request.getText().length());
             Integer improvedLength = improvedText != null ? improvedText.length() : 0;

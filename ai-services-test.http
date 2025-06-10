@@ -1,0 +1,85 @@
+### AI Services Test Endpoints
+### Make sure the Spring Boot application is running and you have a valid JWT token
+
+### 1. Code Explanation Service
+POST http://localhost:8080/api/explain-code
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)",
+  "language": "python",
+  "detailLevel": "intermediate"
+}
+
+###
+
+### 2. Writing Improvement Service
+POST http://localhost:8080/api/improve-writing
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "text": "The quick brown fox jumps over the lazy dog. This sentence is used for testing purposes and contains every letter of the alphabet.",
+  "style": "professional"
+}
+
+###
+
+### 3. Document Q&A Service
+POST http://localhost:8080/api/ask-document
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "question": "What is the main topic of this document?",
+  "context": "Spring Boot is a Java-based framework used to create micro Services. It provides a good platform for Java developers to develop stand-alone and production-grade spring applications that you can just run. You can get started with minimum configurations without the need for an entire Spring configuration setup."
+}
+
+###
+
+### 4. Meeting Notes Processing Service
+POST http://localhost:8080/api/process-meeting-notes
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "transcript": "Meeting started at 9 AM. John presented the quarterly results showing 15% growth. Sarah mentioned we need to hire 2 new developers by end of month. Mike will prepare the budget proposal for next week. We need to follow up on the client feedback from last week.",
+  "includeActions": true,
+  "includeDecisions": true
+}
+
+###
+
+### 5. Content Moderation Service
+POST http://localhost:8080/api/moderate-content
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "text": "This is a perfectly normal and safe text message that should pass content moderation.",
+  "level": "standard"
+}
+
+###
+
+### Get Authentication Token First
+POST http://localhost:8080/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "your-email@example.com",
+  "password": "your-password"
+}
+
+###
+
+### Register if you don't have an account
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "testpassword123"
+}
