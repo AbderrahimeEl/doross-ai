@@ -164,9 +164,10 @@ dmypy.json
 .pyre/
 
 # FastAPI specific
-fastapi-server/static/audio/*.mp3
-fastapi-server/static/audio/*.wav
-fastapi-server/static/audio/*.m4a
+fastapi-server/static/documents/*.pdf
+fastapi-server/static/documents/*.doc
+fastapi-server/static/documents/*.docx
+fastapi-server/static/documents/*.txt
 
 # Application properties with sensitive information
 src/main/resources/application.properties
