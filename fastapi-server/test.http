@@ -1,0 +1,141 @@
+@baseUrl = http://localhost:8000
+@contentType = application/json
+@testText = abderrahim elmoutaouakil is a software engineer and a data scientist. He is passionate about technology and loves to learn new things. He has experience in various programming languages and frameworks, including Python, JavaScript, and React. In his free time, he enjoys reading books and exploring new places. His goal is to become a full-stack developer  and work on innovative projects that make a difference in people's lives.
+### Health Check
+GET {{baseUrl}}/
+
+### 1. Text Summarization
+POST {{baseUrl}}/summarize-with-audio
+Content-Type: {{contentType}}
+
+{
+  "text": "{{testText}}",
+  "language": "english"
+}
+
+### 2. Quiz Generation
+POST {{baseUrl}}/generate-quiz
+Content-Type: {{contentType}}
+
+{
+  "topic": "Python programming",
+  "num_questions": 3,
+  "difficulty": "medium",
+  "language": "english"
+}
+
+### 3. Key Points Extraction
+POST {{baseUrl}}/extract-key-points
+Content-Type: {{contentType}}
+
+{
+  "text": "{{testText}}",
+  "num_points": 3
+}
+
+### 4. Flashcard Generation
+POST {{baseUrl}}/generate-flashcards
+Content-Type: {{contentType}}
+
+{
+  "topic": "Machine Learning",
+  "num_cards": 2
+}
+
+### 5. Code Explanation
+POST {{baseUrl}}/explain-code
+Content-Type: {{contentType}}
+
+{
+  "code": "def factorial(n):\n    return 1 if n == 0 else n * factorial(n-1)",
+  "language": "python",
+  "detail_level": "intermediate"
+}
+
+### 6. Meeting Notes Processing
+POST {{baseUrl}}/process-meeting-notes
+Content-Type: {{contentType}}
+
+{
+  "transcript": "We discussed the new project timeline. John will handle the backend by Friday. Maria will design the UI. We decided to use React for the frontend.",
+  "include_actions": true,
+  "include_decisions": true
+}
+
+### 7. Document Q&A
+POST {{baseUrl}}/ask-document
+Content-Type: {{contentType}}
+
+{
+  "question": "What was decided about the frontend?",
+  "context": "We discussed the new project timeline. John will handle the backend by Friday. Maria will design the UI. We decided to use React for the frontend."
+}
+
+### 8. Writing Improvement
+POST {{baseUrl}}/improve-writing
+Content-Type: {{contentType}}
+
+{
+  "text": "hey i need u to check this text and make it better",
+  "style": "professional"
+}
+
+### 9. Content Moderation
+POST {{baseUrl}}/moderate-content
+Content-Type: {{contentType}}
+
+"This is some harmless text to test moderation"
+
+### 10. File Processing (Note: Requires actual file upload in client)
+POST {{baseUrl}}/process-file
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+{{testText}}
+--WebAppBoundary--
+
+### 11. WebSocket Summarization (Note: Requires WS client)
+WEBSOCKET ws://localhost:8000/ws/summarize
+
+{{testText}}
+
+### 12. Validation Test - Empty Text
+POST {{baseUrl}}/summarize
+Content-Type: {{contentType}}
+
+{
+  "text": "",
+  "language": "english"
+}
+
+### 13. Validation Test - Too Many Questions
+POST {{baseUrl}}/generate-quiz
+Content-Type: {{contentType}}
+
+{
+  "topic": "Python",
+  "num_questions": 25,
+  "difficulty": "easy"
+}
+
+### 14. French Language Test
+POST {{baseUrl}}/summarize
+Content-Type: {{contentType}}
+
+{
+  "text": "Le renard brun rapide saute par-dessus le chien paresseux. Cette phrase contient toutes les lettres de l'alphabet français.",
+  "language": "french"
+}
+
+### 15. Advanced Code Explanation
+POST {{baseUrl}}/explain-code
+Content-Type: {{contentType}}
+
+{
+  "code": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr)//2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+  "language": "python",
+  "detail_level": "advanced"
+}
