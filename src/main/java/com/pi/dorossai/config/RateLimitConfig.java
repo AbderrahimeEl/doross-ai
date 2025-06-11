@@ -11,8 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RateLimitConfig {
     
     /**
-     * Simple in-memory rate limiter for demonstration purposes.
-     * In production, consider using Redis-based solution for distributed systems.
+     * Rate limiting has been disabled.
+     * This bean is kept for compatibility with existing code.
      */
     @Bean
     public RateLimiter rateLimiter() {
@@ -24,16 +24,8 @@ public class RateLimitConfig {
         private final long windowSizeMs = 60_000; // 1 minute window
         
         public boolean isAllowed(String userId, int maxRequests) {
-            long currentTime = System.currentTimeMillis();
-            UserRequestCounter counter = requestCounts.computeIfAbsent(userId, k -> new UserRequestCounter());
-            
-            // Reset counter if window has passed
-            if (currentTime - counter.windowStart.get() > windowSizeMs) {
-                counter.windowStart.set(currentTime);
-                counter.requestCount.set(0);
-            }
-            
-            return counter.requestCount.incrementAndGet() <= maxRequests;
+            // Rate limiting disabled - always return true
+            return true;
         }
         
         private static class UserRequestCounter {

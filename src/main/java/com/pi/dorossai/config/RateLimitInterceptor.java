@@ -17,25 +17,13 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     private final RateLimitConfig.RateLimiter rateLimiter;
       @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
-        String requestURI = request.getRequestURI();
-        
-        // Apply rate limiting to AI endpoints
-        if (isAiEndpoint(requestURI)) {
-            String userId = getCurrentUserId();
-            int maxRequests = getMaxRequestsForEndpoint(requestURI);
-            
-            if (!rateLimiter.isAllowed(userId, maxRequests)) {
-                log.warn("Rate limit exceeded for user {} on endpoint {}", userId, requestURI);
-                response.setStatus(429); // Too Many Requests
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\":\"Rate limit exceeded. Please try again later.\"}");
-                return false;
-            }
-        }
-        
+        // Rate limiting functionality has been disabled
+        // Always return true to allow all requests
         return true;
     }
-      private boolean isAiEndpoint(String uri) {
+      
+    // Method kept for reference but no longer used
+    private boolean isAiEndpoint(String uri) {
         return uri.startsWith("/api/") && (
             uri.contains("/summarize") ||
             uri.contains("/generate-quiz") ||
@@ -48,6 +36,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         );
     }
     
+    // Method kept for reference but no longer used
     private String getCurrentUserId() {
         try {
             return SecurityContextHolder.getContext().getAuthentication().getName();
@@ -56,6 +45,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         }
     }
     
+    // Method kept for reference but no longer used
     private int getMaxRequestsForEndpoint(String uri) {
         // Different rate limits for different endpoints
         if (uri.contains("/generate-quiz")) {
