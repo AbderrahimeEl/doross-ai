@@ -1,6 +1,7 @@
 package com.pi.dorossai.moderation.service;
 
 import com.pi.dorossai.ai.service.AiService;
+import com.pi.dorossai.ai.service.AiResponseCleaner;
 import com.pi.dorossai.moderation.dto.ModerationRequest;
 import com.pi.dorossai.moderation.dto.ModerationResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class ModerationService {
     
     private final AiService aiService;
+    private final AiResponseCleaner responseCleaner;
     private final ObjectMapper objectMapper;
     
     @Retryable(
@@ -60,9 +62,9 @@ public class ModerationService {
         };
         
         return String.format(
-            "Analyze the following text for potentially harmful or inappropriate content using %s:\n\n" +
-            "Text to analyze: %s\n\n" +
-            "Please provide a moderation analysis in JSON format:\n" +
+            "Analyze the following text for potentially harmful or inappropriate content using %s:\n\n" +            "Text to analyze: %s\n\n" +
+            "IMPORTANT: Respond ONLY with valid JSON, no markdown code blocks, no explanations, no additional text.\n\n" +
+            "Required JSON format:\n" +
             "{\n" +
             "  \"flagged\": boolean,\n" +
             "  \"level\": \"%s\",\n" +
@@ -75,20 +77,23 @@ public class ModerationService {
             "- Hate speech or discrimination\n" +
             "- Violence or threats\n" +
             "- Sexual content\n" +
-            "- Self-harm or suicide\n" +
-            "- Illegal activities\n" +
+            "- Self-harm or suicide\n" +            "- Illegal activities\n" +
             "- Spam or misleading information\n\n" +
+            "Return valid JSON only, no markdown formatting.\n" +
             "Return confidence score (0.0-1.0) indicating how certain you are about the classification.",
             threshold,
             request.getText(),
             request.getLevel()
         );
     }
-    
-    private ModerationResponse parseAiResponse(String response, ModerationRequest request) {        try {
+      private ModerationResponse parseAiResponse(String response, ModerationRequest request) {        
+        try {
+            // Clean the response using the centralized cleaner
+            String cleanedResponse = responseCleaner.cleanJsonResponse(response);
+            
             // Try to parse as JSON first
             @SuppressWarnings("unchecked")
-            Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
+            Map<String, Object> jsonResponse = objectMapper.readValue(cleanedResponse, Map.class);
             
             boolean flagged = (Boolean) jsonResponse.getOrDefault("flagged", false);
             String level = (String) jsonResponse.getOrDefault("level", request.getLevel());

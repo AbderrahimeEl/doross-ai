@@ -1,6 +1,7 @@
 package com.pi.dorossai.writing.service;
 
 import com.pi.dorossai.ai.service.AiService;
+import com.pi.dorossai.ai.service.AiResponseCleaner;
 import com.pi.dorossai.writing.dto.WritingImprovementRequest;
 import com.pi.dorossai.writing.dto.WritingImprovementResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class WritingService {
     
     private final AiService aiService;
+    private final AiResponseCleaner responseCleaner;
     private final ObjectMapper objectMapper;
     
     @Retryable(
@@ -53,19 +55,19 @@ public class WritingService {
     
     private String buildPrompt(WritingImprovementRequest request) {
         return String.format(
-            "Rewrite the following text in %s style:\n\n" +
-            "Original: %s\n\n" +
-            "Please provide your response in JSON format with the following structure:\n" +
+            "Rewrite the following text in %s style:\n\n" +            "Original: %s\n\n" +
+            "IMPORTANT: Respond ONLY with valid JSON, no markdown code blocks, no explanations, no additional text.\n\n" +
+            "Required JSON format:\n" +
             "{\n" +
             "  \"improved_text\": \"your improved version here\",\n" +
             "  \"changes\": [\"list of specific changes made\"],\n" +
             "  \"original_length\": %d,\n" +
             "  \"improved_length\": 0\n" +
             "}\n\n" +
-            "Focus on:\n" +
-            "- Clarity and readability\n" +
+            "Focus on:\n" +            "- Clarity and readability\n" +
             "- Appropriate tone for %s style\n" +
             "- Grammar and structure improvements\n" +
+            "- Return valid JSON only, no markdown formatting\n" +
             "- Maintaining the original meaning",
             request.getStyle(),
             request.getText(),
@@ -73,11 +75,14 @@ public class WritingService {
             request.getStyle()
         );
     }
-    
-    private WritingImprovementResponse parseAiResponse(String response, WritingImprovementRequest request) {        try {
+      private WritingImprovementResponse parseAiResponse(String response, WritingImprovementRequest request) {        
+        try {
+            // Clean the response using the centralized cleaner
+            String cleanedResponse = responseCleaner.cleanJsonResponse(response);
+            
             // Try to parse as JSON first
             @SuppressWarnings("unchecked")
-            Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
+            Map<String, Object> jsonResponse = objectMapper.readValue(cleanedResponse, Map.class);
             
             String improvedText = (String) jsonResponse.get("improved_text");
             @SuppressWarnings("unchecked")

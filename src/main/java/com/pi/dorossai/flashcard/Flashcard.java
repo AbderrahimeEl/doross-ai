@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Flashcard {
-    private String term;
-    private String definition;
-    private String context;
+    private String question;
+    private String answer;
 }

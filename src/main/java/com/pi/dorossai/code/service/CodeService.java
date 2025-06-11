@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +19,9 @@ import java.util.Map;
 @Slf4j
 public class CodeService {
     
-    private final AiService aiService;
-    
-    @Retryable(
+    private final AiService aiService;    @Retryable(
         value = { Exception.class },
+        exclude = { ResourceAccessException.class },
         maxAttempts = 3,
         backoff = @Backoff(delay = 1000)
     )
@@ -41,8 +41,21 @@ public class CodeService {
                 explanation,
                 request.getLanguage(),
                 request.getDetailLevel()
-            );
-            
+            );        } catch (ResourceAccessException e) {
+            if (e.getCause() != null && e.getCause().getMessage().contains("Read timed out")) {
+                log.error("Code explanation timed out: {}", e.getMessage());
+                return new CodeExplanationResponse(
+                    String.format("I apologize, but the code explanation service is currently experiencing high load and timed out. " +
+                            "Here's a basic analysis of your %s code:\n\n" +
+                            "The code appears to be written in %s. To get a detailed explanation, please try again in a moment when the service load is lower.",
+                            request.getLanguage(), request.getLanguage()),
+                    request.getLanguage(),
+                    request.getDetailLevel()
+                );
+            } else {
+                log.error("Code explanation connection failed: {}", e.getMessage());
+                throw new RuntimeException("Failed to connect to AI service: " + e.getMessage(), e);
+            }
         } catch (Exception e) {
             log.error("Code explanation failed: {}", e.getMessage());
             throw new RuntimeException("Failed to explain code: " + e.getMessage(), e);

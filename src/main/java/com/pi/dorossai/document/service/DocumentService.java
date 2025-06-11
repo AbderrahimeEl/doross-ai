@@ -1,6 +1,7 @@
 package com.pi.dorossai.document.service;
 
 import com.pi.dorossai.ai.service.AiService;
+import com.pi.dorossai.ai.service.AiResponseCleaner;
 import com.pi.dorossai.document.dto.DocumentQARequest;
 import com.pi.dorossai.document.dto.DocumentQAResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class DocumentService {
     
     private final AiService aiService;
+    private final AiResponseCleaner responseCleaner;
     private final ObjectMapper objectMapper;
     
     @Retryable(
@@ -56,17 +58,17 @@ public class DocumentService {
             "Answer the following question based strictly on the provided context. " +
             "If the answer cannot be determined from the context, respond with " +
             "\"I cannot determine from the given context\".\n\n" +
-            "Question: %s\n\n" +
-            "Context: %s\n\n" +
-            "Please provide your response in JSON format:\n" +
+            "Question: %s\n\n" +            "Context: %s\n\n" +
+            "IMPORTANT: Respond ONLY with valid JSON, no markdown code blocks, no explanations, no additional text.\n\n" +
+            "Required JSON format:\n" +
             "{\n" +
             "  \"answer\": \"your answer here\",\n" +
             "  \"confidence\": \"high/medium/low\"\n" +
             "}\n\n" +
-            "Guidelines:\n" +
-            "- Only use information from the provided context\n" +
+            "Guidelines:\n" +            "- Only use information from the provided context\n" +
             "- Be concise and accurate\n" +
             "- Set confidence based on how clearly the context supports your answer\n" +
+            "- Return valid JSON only, no markdown formatting\n" +
             "- Use 'high' confidence when the context directly answers the question\n" +
             "- Use 'medium' confidence when the answer requires some inference\n" +
             "- Use 'low' confidence when the context only partially supports the answer",
@@ -74,11 +76,14 @@ public class DocumentService {
             request.getContext()
         );
     }
-    
-    private DocumentQAResponse parseAiResponse(String response) {        try {
+      private DocumentQAResponse parseAiResponse(String response) {        
+        try {
+            // Clean the response using the centralized cleaner
+            String cleanedResponse = responseCleaner.cleanJsonResponse(response);
+            
             // Try to parse as JSON first
             @SuppressWarnings("unchecked")
-            Map<String, Object> jsonResponse = objectMapper.readValue(response, Map.class);
+            Map<String, Object> jsonResponse = objectMapper.readValue(cleanedResponse, Map.class);
             
             String answer = (String) jsonResponse.get("answer");
             String confidence = (String) jsonResponse.getOrDefault("confidence", "medium");

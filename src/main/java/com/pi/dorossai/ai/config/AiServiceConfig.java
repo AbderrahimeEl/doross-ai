@@ -14,11 +14,10 @@ public class AiServiceConfig {
     
     @Value("${dorossai.ai.github.api-key}")
     private String githubApiKey;
-    
-    @Value("${dorossai.ai.timeout.connection:5000}")
+      @Value("${dorossai.ai.timeout.connection:10000}")
     private int connectionTimeout;
     
-    @Value("${dorossai.ai.timeout.read:30000}")
+    @Value("${dorossai.ai.timeout.read:60000}")
     private int readTimeout;
     
     public String getOpenaiApiKey() {

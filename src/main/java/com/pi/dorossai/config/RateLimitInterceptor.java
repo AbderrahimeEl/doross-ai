@@ -35,8 +35,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         
         return true;
     }
-    
-    private boolean isAiEndpoint(String uri) {
+      private boolean isAiEndpoint(String uri) {
         return uri.startsWith("/api/") && (
             uri.contains("/summarize") ||
             uri.contains("/generate-quiz") ||
@@ -45,7 +44,6 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             uri.contains("/explain-code") ||
             uri.contains("/improve-writing") ||
             uri.contains("/ask-document") ||
-            uri.contains("/process-meeting-notes") ||
             uri.contains("/moderate-content")
         );
     }

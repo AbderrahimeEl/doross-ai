@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +55,18 @@ public class AiService {
             if (choices.isEmpty()) {
                 throw new RuntimeException("Empty choices in response");
             }
-            
-            @SuppressWarnings("unchecked")
+              @SuppressWarnings("unchecked")
             Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
             return (String) message.get("content");
             
+        } catch (ResourceAccessException e) {
+            if (e.getCause() != null && e.getCause().getMessage().contains("Read timed out")) {
+                log.error("AI service request timed out after waiting for response: {}", e.getMessage());
+                throw new RuntimeException("AI service request timed out. Please try again later.", e);
+            } else {
+                log.error("AI service connection failed: {}", e.getMessage());
+                throw new RuntimeException("Failed to connect to AI service: " + e.getMessage(), e);
+            }
         } catch (Exception e) {
             log.error("AI service call failed: {}", e.getMessage());
             throw new RuntimeException("Failed to call AI service: " + e.getMessage(), e);
