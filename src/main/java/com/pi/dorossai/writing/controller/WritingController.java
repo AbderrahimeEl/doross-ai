@@ -24,13 +24,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Writing Improvement", description = "AI-powered writing enhancement services")
 public class WritingController {
     
-    private final WritingService writingService;
-      @PostMapping("/improve-writing")
+    private final WritingService writingService;    @PostMapping("/improve-writing")
     @Operation(
         summary = "Improve Writing", 
         description = "Enhance text quality and style using AI. Supports multiple writing styles including professional, academic, casual, and creative. Provides detailed feedback on improvements made."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

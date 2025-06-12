@@ -34,12 +34,8 @@ public class SwaggerConfig {    @Bean
                         - **Document Q&A**: Answer questions based on document context
                         - **Content Moderation**: Analyze text for harmful or inappropriate content
                         - **User Management**: Complete user authentication and management system
-                        
-                        ## Authentication
-                        Most endpoints require authentication using JWT tokens. To get started:
-                        1. Register a new account using `/api/auth/signup`
-                        2. Login with your credentials using `/api/auth/login`
-                        3. Use the returned JWT token in the Authorization header: `Bearer <token>`
+                          ## Authentication
+                        Authentication is DISABLED in this application. You don't need to provide tokens to access endpoints.
                         
                         ## Rate Limiting
                         API requests are rate-limited to ensure fair usage. Please refer to response headers for rate limit information.

@@ -24,13 +24,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Code Analysis", description = "Code explanation and analysis services")
 public class CodeController {
     
-    private final CodeService codeService;
-      @PostMapping("/explain-code")
+    private final CodeService codeService;    @PostMapping("/explain-code")
     @Operation(
         summary = "Explain Code", 
         description = "Analyze and explain code functionality at different detail levels. Supports multiple programming languages and provides detailed explanations of code logic, structure, and best practices."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

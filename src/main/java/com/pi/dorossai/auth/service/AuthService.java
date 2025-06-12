@@ -21,26 +21,32 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtils jwtUtils;
-
-    public Authentication authenticateUser(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
+    private final JwtUtils jwtUtils;    public Authentication authenticateUser(LoginRequest loginRequest) {
+        // Authentication is disabled, so we create a successful authentication regardless of credentials
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), 
+                null, 
+                java.util.Collections.emptyList());
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
-    }
-
-    public User registerUser(SignupRequest signupRequest) {
-        // Check if email exists
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            throw new IllegalArgumentException("Email is already in use");
+    }    public User registerUser(SignupRequest signupRequest) {
+        // Authentication is disabled, so we'll just create the user without much validation
+        
+        // Check if email exists (optional since auth is disabled)
+        boolean emailExists = userRepository.existsByEmail(signupRequest.getEmail());
+        
+        // If email exists and auth is disabled, we'll still create a new user with a modified email
+        String email = signupRequest.getEmail();
+        if (emailExists) {
+            // Append a random suffix to make the email unique
+            email = email + "-" + System.currentTimeMillis();
         }
 
         // Create new user
         User user = new User();
         user.setName(signupRequest.getName());
-        user.setEmail(signupRequest.getEmail());
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 
         // Set role (default to USER if not specified)

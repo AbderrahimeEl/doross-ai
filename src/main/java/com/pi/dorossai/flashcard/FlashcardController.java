@@ -25,13 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FlashcardController {
     
     private final FlashcardService flashcardService;
-    
-    @PostMapping("/generate-flashcards")
+      @PostMapping("/generate-flashcards")
     @Operation(
         summary = "Generate Flashcards", 
         description = "Generate educational flashcards on any topic using AI. Perfect for studying and memorization."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

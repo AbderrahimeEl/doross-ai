@@ -26,13 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(name = "Mind Map", description = "AI-powered mind map generation in Mermaid format")
 public class MindMapController {
-    private final MindMapService mindMapService;
-
-    @PostMapping("/generate-mindmap")
+    private final MindMapService mindMapService;    @PostMapping("/generate-mindmap")
     @Operation(
         summary = "Generate Mind Map",
-        description = "Generate a mind map in Mermaid format for a given topic.",
-        security = @SecurityRequirement(name = "BearerAuth")
+        description = "Generate a mind map in Mermaid format for a given topic."
     )
     @ApiResponses(value = {
         @ApiResponse(

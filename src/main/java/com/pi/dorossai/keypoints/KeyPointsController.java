@@ -29,13 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class KeyPointsController {
     
     private final KeyPointsService keyPointsService;
-    
-    @PostMapping("/extract-key-points")
+      @PostMapping("/extract-key-points")
     @Operation(
         summary = "Extract Key Points", 
         description = "Extract the most important and meaningful points from text content. Perfect for creating study notes, meeting summaries, or content highlights."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

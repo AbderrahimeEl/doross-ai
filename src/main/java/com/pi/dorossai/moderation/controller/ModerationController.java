@@ -28,12 +28,10 @@ import java.time.LocalDateTime;
 public class ModerationController {
     
     private final ModerationService moderationService;
-    
-    @PostMapping("/analyze")
+      @PostMapping("/analyze")
     @Operation(
         summary = "Analyze content for safety and moderation",
-        description = "Uses AI to analyze text content for potential policy violations, harmful content, or safety concerns",
-        security = @SecurityRequirement(name = "bearerAuth")
+        description = "Uses AI to analyze text content for potential policy violations, harmful content, or safety concerns"
     )
     @ApiResponses(value = {
         @ApiResponse(

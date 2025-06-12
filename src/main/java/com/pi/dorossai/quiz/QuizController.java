@@ -25,13 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuizController {
     
     private final QuizService quizService;
-    
-    @PostMapping("/generate-quiz")
+      @PostMapping("/generate-quiz")
     @Operation(
         summary = "Generate Quiz", 
         description = "Generate a multiple-choice quiz on any topic with customizable difficulty and language. Perfect for assessments and learning evaluation."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

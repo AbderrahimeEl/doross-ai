@@ -29,13 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SummarizationController {
     
     private final SummarizationService summarizationService;
-    
-    @PostMapping("/summarize")
+      @PostMapping("/summarize")
     @Operation(
         summary = "Summarize Text", 
         description = "Generate concise summaries of long texts while preserving key information. Supports multiple languages and maintains context."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

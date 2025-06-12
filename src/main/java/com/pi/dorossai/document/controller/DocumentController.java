@@ -24,13 +24,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Document Q&A", description = "Document-based question answering services")
 public class DocumentController {
     
-    private final DocumentService documentService;
-      @PostMapping("/ask-document")
+    private final DocumentService documentService;    @PostMapping("/ask-document")
     @Operation(
         summary = "Ask Document", 
         description = "Answer questions based on provided document context. Uses AI to analyze the document content and provide accurate, contextual answers with confidence levels."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 

@@ -27,17 +27,12 @@ import java.util.List;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "User Management", description = "User management operations (Admin only)")
+@Tag(name = "User Management", description = "User management operations (Authentication disabled)")
 public class UserController {
-    private final UserService userService;
-
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
+    private final UserService userService;    @GetMapping    @Operation(
         summary = "Get All Users", 
-        description = "Retrieve a list of all users in the system. Only accessible by administrators."
+        description = "Retrieve a list of all users in the system. Authentication is disabled."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 
@@ -101,15 +96,10 @@ public class UserController {
                 .build();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userService.getUserById(#id).email == authentication.name")
-    @Operation(
+    }    @GetMapping("/{id}")    @Operation(
         summary = "Get User by ID", 
-        description = "Retrieve a specific user by their ID. Admins can access any user, regular users can only access their own profile."
+        description = "Retrieve a specific user by their ID. Authentication is disabled."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 
@@ -167,15 +157,10 @@ public class UserController {
         @Parameter(description = "User ID", required = true, example = "1")
         @PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
-    }
-
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
+    }    @PostMapping    @Operation(
         summary = "Create User", 
-        description = "Create a new user account. Only accessible by administrators."
+        description = "Create a new user account. Authentication is disabled."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201", 
@@ -235,15 +220,10 @@ public class UserController {
         )
         @Valid @RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userService.getUserById(#id).email == authentication.name")
-    @Operation(
+    }    @PutMapping("/{id}")    @Operation(
         summary = "Update User", 
-        description = "Update an existing user. Admins can update any user, regular users can only update their own profile."
+        description = "Update an existing user. Authentication is disabled."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200", 
@@ -305,15 +285,10 @@ public class UserController {
         )
         @Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
+    }    @DeleteMapping("/{id}")    @Operation(
         summary = "Delete User", 
-        description = "Delete a user account. Only accessible by administrators."
+        description = "Delete a user account. Authentication is disabled."
     )
-    @SecurityRequirement(name = "BearerAuth")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "204", 
